@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AI Chat Bulk Delete</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="icons/icon48.png" alt="" width="40" height="40">
+    <div>
+      <h1>AI Chat Bulk Delete</h1>
+      <p class="sub">Bulk delete for your AI chats</p>
+    </div>
+    <span class="version" id="version"></span>
+  </header>
+
+  <section class="counter" aria-live="polite">
+    <button type="button" id="reset" title="Reset the counter">Reset</button>
+    <div class="total" id="total">0</div>
+    <div class="total-label" id="total-label">chats deleted</div>
+    <div class="split">
+      <span><b id="aiMode">0</b>AI Mode</span>
+      <span><b id="gemini">0</b>Gemini</span>
+      <span><b id="claude">0</b>Claude</span>
+      <span><b id="chatgpt">0</b>ChatGPT</span>
+    </div>
+  </section>
+
+  <div class="open">
+    <a class="btn" href="https://www.google.com/search?udm=50" target="_blank" title="Open Google AI Mode">AI Mode</a>
+    <a class="btn" href="https://gemini.google.com/app" target="_blank" title="Open Gemini">Gemini</a>
+    <a class="btn" href="https://claude.ai/recents" target="_blank" title="Open your Claude chats">Claude</a>
+    <a class="btn" href="https://chatgpt.com/" target="_blank" title="Open ChatGPT">ChatGPT</a>
+  </div>
+
+  <section class="how">
+    <h2>Quick delete</h2>
+    <p>Hover over a chat in the sidebar and click the red <span class="chip trash">🗑</span> button. It's deleted right away.</p>
+
+    <h2>Bulk delete</h2>
+    <ol>
+      <li>Click <b>Bulk delete</b> in the bar at the top of the page.</li>
+      <li>Click chats to select (Shift-click for a range).</li>
+      <li>For everything: <b>Load all</b>, then <b>Select all</b>.</li>
+      <li>Click <b>Delete</b>, then click again to confirm.</li>
+    </ol>
+
+    <ul class="tips">
+      <li><b>Stop</b> halts a run. Esc leaves selection mode.</li>
+      <li>Keep the tab open while chats are deleted.</li>
+    </ul>
+
+    <p class="warn">Deleted chats can't be restored.</p>
+
+    <details>
+      <summary>If it stops working</summary>
+      <p>Google sometimes changes these pages. Chats that couldn't be deleted get a red outline. To capture what went wrong:</p>
+      <ol>
+        <li>Click <span class="chip">🐞</span> in the bar. It turns red and starts recording.</li>
+        <li>Delete one chat by hand: ⋮ → Delete → confirm.</li>
+        <li>Click <span class="chip">🐞</span> again to copy the debug info, then share it with whoever maintains the extension.</li>
+      </ol>
+      <p>Chat titles and links are masked in the debug info.</p>
+    </details>
+  </section>
+
+  <section class="links">
+    <a id="donate" class="link-btn primary" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      Support the creator
+    </a>
+    <a id="website" class="link-btn" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.93 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14a8.2 8.2 0 0 1 0-4h3.38a16.5 16.5 0 0 0 0 4H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.99 7.99 0 0 1 5.08 16zm2.95-8H5.08a7.99 7.99 0 0 1 4.33-3.56A15.65 15.65 0 0 0 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66a14.7 14.7 0 0 1 0-4h4.68a14.7 14.7 0 0 1 0 4zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14a16.5 16.5 0 0 0 0-4h3.38a8.2 8.2 0 0 1 0 4h-3.38z"/></svg>
+      Visit creator website
+    </a>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>

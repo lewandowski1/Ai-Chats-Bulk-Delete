@@ -1,0 +1,238 @@
+/* ---------- chat rows ---------- */
+
+[data-gbd-row] {
+  position: relative !important;
+}
+
+.gbd-check {
+  display: none;
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  z-index: 3;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0;
+  box-sizing: border-box;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+html.gbd-selecting [data-gbd-row] {
+  padding-left: 32px !important;
+  box-sizing: border-box !important;
+  cursor: pointer;
+}
+
+html.gbd-selecting .gbd-check {
+  display: block;
+}
+
+[data-gbd-selected] > .gbd-check {
+  background: #1a73e8;
+  border-color: #1a73e8;
+  opacity: 1;
+}
+
+[data-gbd-selected] > .gbd-check::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+html.gbd-selecting [data-gbd-selected] {
+  background: rgba(26, 115, 232, 0.16) !important;
+  border-radius: 16px;
+}
+
+[data-gbd-pending] {
+  opacity: 0.4 !important;
+  transition: opacity 0.2s;
+}
+
+[data-gbd-failed] {
+  box-shadow: inset 0 0 0 2px #d93025 !important;
+  border-radius: 16px;
+}
+
+.gbd-quick {
+  all: unset;
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 44px;
+  z-index: 3;
+  width: 26px;
+  height: 26px;
+  margin-top: -13px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #d93025;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.gbd-quick:hover {
+  background: #b3261e;
+}
+
+.gbd-quick:focus-visible {
+  outline: 2px solid #1a73e8;
+  outline-offset: 1px;
+}
+
+[data-gbd-row]:hover > .gbd-quick,
+.gbd-quick:focus-visible {
+  display: flex;
+}
+
+html.gbd-selecting .gbd-quick,
+[data-gbd-pending] > .gbd-quick {
+  display: none !important;
+}
+
+.gbd-quick svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* ---------- floating toolbar ---------- */
+
+.gbd-bar {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483000;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100vw - 16px);
+  box-sizing: border-box;
+  padding: 5px 6px 5px 2px;
+  border: 1px solid #dadce0;
+  border-radius: 20px;
+  background: #fff;
+  color: #1f1f1f;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  font: 500 13px/1.2 "Google Sans", Roboto, Arial, sans-serif;
+  user-select: none;
+}
+
+.gbd-bar[hidden],
+.gbd-bar [hidden] {
+  display: none !important;
+}
+
+.gbd-bar button {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border-radius: 15px;
+  background: #f1f3f4;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gbd-bar button:hover {
+  background: #e3e5e8;
+}
+
+.gbd-bar button:focus-visible {
+  outline: 2px solid #1a73e8;
+  outline-offset: 1px;
+}
+
+.gbd-bar button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.gbd-bar.gbd-dark {
+  border-color: #444746;
+  background: #2b2c2f;
+  color: #e3e3e3;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.gbd-bar.gbd-dark button {
+  background: #3c4043;
+}
+
+.gbd-bar.gbd-dark button:hover {
+  background: #4a4e52;
+}
+
+/* Kept after the dark rules so they win at equal specificity. */
+.gbd-bar button.gbd-danger {
+  background: #d93025;
+  color: #fff;
+}
+
+.gbd-bar button.gbd-danger:hover {
+  background: #b3261e;
+}
+
+.gbd-bar button.gbd-armed {
+  background: #8c1d18;
+  animation: gbd-pulse 0.8s ease-in-out infinite alternate;
+}
+
+.gbd-bar button.gbd-icon-btn {
+  width: 30px;
+  padding: 0;
+  justify-content: center;
+  background: transparent;
+}
+
+.gbd-bar button.gbd-recording {
+  background: #d93025;
+  color: #fff;
+  animation: gbd-pulse 0.8s ease-in-out infinite alternate;
+}
+
+.gbd-bar svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.gbd-grip {
+  display: flex;
+  align-items: center;
+  padding: 0 2px;
+  opacity: 0.5;
+  cursor: grab;
+  touch-action: none;
+}
+
+.gbd-status {
+  padding: 0 6px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes gbd-pulse {
+  from { box-shadow: 0 0 0 0 rgba(217, 48, 37, 0.7); }
+  to { box-shadow: 0 0 0 5px rgba(217, 48, 37, 0); }
+}
