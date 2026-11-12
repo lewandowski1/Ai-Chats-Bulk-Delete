@@ -5,6 +5,8 @@
   'use strict';
   if (window.__gbdLoaded) return;
   window.__gbdLoaded = true;
+  // The extension API: `browser` in Firefox, `chrome` in Chrome. Both return promises.
+  const ext = globalThis.browser ?? globalThis.chrome;
 
   const LOG = '[AI Chat Bulk Delete]';
   const DELETE_WORDS = ['delete', 'slet', 'löschen', 'supprimer', 'eliminar', 'elimina', 'excluir', 'verwijderen',
@@ -596,7 +598,7 @@
   // back-to-back deletions in this tab don't overwrite each other.
   let statsWrite = Promise.resolve();
   function countDeletion() {
-    const storage = globalThis.chrome?.storage?.local;
+    const storage = ext?.storage?.local;
     if (!storage) return;
     const field = site.statsKey;
     statsWrite = statsWrite.then(async () => {
@@ -880,7 +882,7 @@
     const menuBtn = first && site.findMenuButton(first.row);
     const root = site.debugRoot();
     const text = [
-      `AI Chat Bulk Delete ${globalThis.chrome?.runtime?.getManifest?.().version ?? '?'} on ${site.name}, ${navigator.userAgent}`,
+      `AI Chat Bulk Delete ${ext?.runtime?.getManifest?.().version ?? '?'} on ${site.name}, ${navigator.userAgent}`,
       `chats found: ${items.length}`,
       `menu button of first chat: ${menuBtn ? sanitize(menuBtn, true, 1500) : 'not found'}`,
       steps.length
@@ -1112,7 +1114,7 @@
   const POPUP_ACTIONS = {
     select: enterSelect, selectAll, loadAll, clear: clearSelection, delete: deleteSelected, stop, done: exitSelect,
   };
-  globalThis.chrome?.runtime?.onMessage?.addListener((message, _sender, reply) => {
+  ext?.runtime?.onMessage?.addListener((message, _sender, reply) => {
     if (message?.gbd !== 'popup') return;
     POPUP_ACTIONS[message.action]?.();
     reply({
@@ -1128,12 +1130,12 @@
   });
 
   // The bar's on / off switch, from the popup.
-  const syncStorage = globalThis.chrome?.storage?.sync;
+  const syncStorage = ext?.storage?.sync;
   syncStorage?.get('showBar').then(({ showBar: on }) => {
     showBar = on !== false;
     render();
   }).catch(() => {});
-  globalThis.chrome?.storage?.onChanged?.addListener((changes, area) => {
+  ext?.storage?.onChanged?.addListener((changes, area) => {
     if (area !== 'sync' || !changes.showBar) return;
     showBar = changes.showBar.newValue !== false;
     render();

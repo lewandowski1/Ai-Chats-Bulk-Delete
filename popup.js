@@ -1,3 +1,5 @@
+// The extension API: `browser` in Firefox, `chrome` in Chrome. Both return promises.
+const ext = globalThis.browser ?? globalThis.chrome;
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => (n || 0).toLocaleString();
 
@@ -10,9 +12,9 @@ function show(stats = {}) {
   $('chatgpt').textContent = fmt(stats.chatgpt);
 }
 
-$('version').textContent = 'v' + chrome.runtime.getManifest().version;
-chrome.storage.local.get('stats').then(({ stats }) => show(stats));
-chrome.storage.onChanged.addListener((changes, area) => {
+$('version').textContent = 'v' + ext.runtime.getManifest().version;
+ext.storage.local.get('stats').then(({ stats }) => show(stats));
+ext.storage.onChanged.addListener((changes, area) => {
   if (area === 'local' && changes.stats) show(changes.stats.newValue);
 });
 
@@ -30,7 +32,7 @@ reset.addEventListener('click', async () => {
     return;
   }
   clearTimeout(armTimer);
-  await chrome.storage.local.remove('stats');
+  await ext.storage.local.remove('stats');
   show({});
   reset.classList.remove('armed');
   reset.textContent = 'Reset';
@@ -39,10 +41,10 @@ reset.addEventListener('click', async () => {
 // ---------- the floating bar's switch ----------
 
 const showBar = $('show-bar');
-chrome.storage.sync.get('showBar').then(({ showBar: on }) => {
+ext.storage.sync.get('showBar').then(({ showBar: on }) => {
   showBar.checked = on !== false;
 });
-showBar.addEventListener('change', () => chrome.storage.sync.set({ showBar: showBar.checked }));
+showBar.addEventListener('change', () => ext.storage.sync.set({ showBar: showBar.checked }));
 
 // ---------- this tab: the same buttons as the page's floating bar ----------
 // The extension's page script answers in the AI chat sites only, so elsewhere this stays hidden.
@@ -58,7 +60,7 @@ let deleteTimer = 0;
 async function ask(action) {
   if (tabId === null) return null;
   try {
-    return (await chrome.tabs.sendMessage(tabId, { gbd: 'popup', action })) ?? null;
+    return (await ext.tabs.sendMessage(tabId, { gbd: 'popup', action })) ?? null;
   } catch {
     return null; // not a chat site, or the page hasn't loaded the extension (reload it)
   }
@@ -110,7 +112,7 @@ for (const [action, button] of Object.entries(buttons)) {
   });
 }
 
-chrome.tabs.query({ active: true, currentWindow: true }).then(async ([tab]) => {
+ext.tabs.query({ active: true, currentWindow: true }).then(async ([tab]) => {
   tabId = tab?.id ?? null;
   showPage(await ask());
   // Keep up with the page: selections made there, and the progress of a run.

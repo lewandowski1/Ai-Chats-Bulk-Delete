@@ -61,6 +61,12 @@ The page is also linked from the hub site in `../extensions-site`, which copies 
 
 `make-zip.ps1` also writes the store upload, `store/*.zip`, with `manifest.json` at the top of the zip as the store requires. `store/listing.md` has the text for each tab of the store's developer dashboard, and `store/` holds the 1280x800 screenshot and the 440x280 promo tile.
 
+## Firefox
+
+The same code runs in Firefox 140 and later. `make-zip.ps1` also writes `store/ai-chat-bulk-delete-firefox.zip` for addons.mozilla.org: the store zip with Firefox's settings added to `manifest.json` (its add-on ID `ai-chat-bulk-delete@nikma.xyz`, which must never change once published, the minimum version, and the statement that it collects no data). The scripts call the extension API through `browser` where it exists (Firefox) and `chrome` otherwise, so nothing else differs.
+
+To try it: in Firefox, open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on** and pick `manifest.json` inside the unzipped Firefox zip (Firefox removes temporary add-ons when it closes).
+
 ## If it stops working
 
 These sites change their pages from time to time. When the extension can't find something, it outlines the chat in red and logs the reason in the DevTools console with the prefix `[AI Chat Bulk Delete]`.
@@ -77,3 +83,7 @@ The debug info contains the sidebar's structure, the elements you clicked, what 
 - Gemini: the `gemini` object and `GEMINI` selectors.
 - Claude: the `claude` object and `CLAUDE` selectors.
 - ChatGPT: the `chatgpt` object and `CHATGPT` selectors.
+
+## License
+
+MIT (see `LICENSE`).
