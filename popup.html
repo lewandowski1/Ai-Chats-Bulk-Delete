@@ -27,6 +27,36 @@
     </div>
   </section>
 
+  <!-- The same buttons as the page's floating bar, for the chat site open in this tab. -->
+  <section class="page" id="page" hidden>
+    <div class="page-head">
+      <h2>On this page</h2>
+      <span class="page-site" id="page-site"></span>
+    </div>
+    <p class="page-status" id="page-status" aria-live="polite"></p>
+    <p class="page-hint" id="page-hint" hidden>Click chats in the page's sidebar to select them (Shift-click for a range), then come back here to delete them.</p>
+    <div class="page-actions">
+      <button type="button" class="act primary" data-action="select">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        Bulk delete
+      </button>
+      <button type="button" class="act" data-action="selectAll">Select all</button>
+      <button type="button" class="act" data-action="loadAll">Load all</button>
+      <button type="button" class="act" data-action="clear">Clear</button>
+      <button type="button" class="act danger" data-action="delete" id="act-delete">Delete</button>
+      <button type="button" class="act danger" data-action="stop">Stop</button>
+      <button type="button" class="act" data-action="done">Done</button>
+    </div>
+  </section>
+
+  <label class="setting">
+    <span>
+      <b>Floating bar on the page</b>
+      <span class="setting-note">Turn it off to use the buttons in this popup instead.</span>
+    </span>
+    <input type="checkbox" id="show-bar" role="switch" checked>
+  </label>
+
   <div class="open">
     <a class="btn" href="https://www.google.com/search?udm=50" target="_blank" title="Open Google AI Mode">AI Mode</a>
     <a class="btn" href="https://gemini.google.com/app" target="_blank" title="Open Gemini">Gemini</a>
@@ -40,7 +70,7 @@
 
     <h2>Bulk delete</h2>
     <ol>
-      <li>Click <b>Bulk delete</b> in the bar at the top of the page.</li>
+      <li>Click <b>Bulk delete</b> in the bar at the top of the page, or under <b>On this page</b> here.</li>
       <li>Click chats to select (Shift-click for a range).</li>
       <li>For everything: <b>Load all</b>, then <b>Select all</b>.</li>
       <li>Click <b>Delete</b>, then click again to confirm.</li>
@@ -57,7 +87,7 @@
       <summary>If it stops working</summary>
       <p>Google sometimes changes these pages. Chats that couldn't be deleted get a red outline. To capture what went wrong:</p>
       <ol>
-        <li>Click <span class="chip">🐞</span> in the bar. It turns red and starts recording.</li>
+        <li>Click <span class="chip">🐞</span> in the bar (turn the floating bar on for this). It turns red and starts recording.</li>
         <li>Delete one chat by hand: ⋮ → Delete → confirm.</li>
         <li>Click <span class="chip">🐞</span> again to copy the debug info, then share it with whoever maintains the extension.</li>
       </ol>

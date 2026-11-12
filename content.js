@@ -474,6 +474,9 @@
   let armTimer = 0;
   let flashText = '';
   let flashTimer = 0;
+  // The floating bar can be switched off in the popup (chrome.storage.sync "showBar"); the popup's
+  // own buttons then do the same things (see "the popup's buttons" below).
+  let showBar = true;
   let lastFailure = '';
 
   // ---------- deleting ----------
@@ -760,6 +763,12 @@
       render();
       return;
     }
+    deleteSelected();
+  }
+
+  // Deletes the selection, already confirmed (a second click on the bar's or the popup's button).
+  function deleteSelected() {
+    if (!selected.size || running) return;
     disarm();
     // Bottom-up keeps the title-based keys of the rows above stable, and the open
     // chat goes last in case deleting it navigates away.
@@ -1003,11 +1012,21 @@
     return matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
+  // The line the bar (and the popup) shows: progress, the last result, or the selection.
+  function statusText() {
+    if (running) return `Deleting ${Math.min(progress.done + 1, progress.total)} of ${progress.total}…`;
+    if (loading) return `Loading chats… ${items.length}`;
+    if (recording) return `Recording (${recording.steps.length} clicks). Delete one chat by hand, then click 🐞 again`;
+    if (flashText) return flashText;
+    if (mode === 'select') return items.length ? `${selected.size} of ${items.length} selected` : 'No chats found. Open the sidebar.';
+    return '';
+  }
+
   function render() {
     html.classList.toggle('gbd-selecting', mode === 'select');
     html.classList.toggle('gbd-running', running);
     bar.classList.toggle('gbd-dark', isDark());
-    bar.hidden = !site.isActive() && !running;
+    bar.hidden = !showBar || (!site.isActive() && !running);
 
     const busy = running || loading;
     const n = selected.size;
@@ -1017,12 +1036,7 @@
     debugBtn.classList.toggle('gbd-recording', !!recording);
     stopBtn.hidden = !busy;
 
-    let status = '';
-    if (running) status = `Deleting ${Math.min(progress.done + 1, progress.total)} of ${progress.total}…`;
-    else if (loading) status = `Loading chats… ${items.length}`;
-    else if (recording) status = `Recording (${recording.steps.length} clicks). Delete one chat by hand, then click 🐞 again`;
-    else if (flashText) status = flashText;
-    else if (mode === 'select') status = items.length ? `${n} of ${items.length} selected` : 'No chats found. Open the sidebar.';
+    const status = statusText();
     setText(statusEl, status);
     statusEl.hidden = !status;
 
@@ -1089,6 +1103,41 @@
   });
 
   addEventListener('resize', clampBar);
+
+  // ---------- the popup's buttons ----------
+
+  // While it's open, the popup asks for this tab's state a couple of times a second, and its
+  // buttons do the same as the bar's. Its Delete button asks for its own confirmation first.
+  const SITE_NAMES = { aiMode: 'Google AI Mode', gemini: 'Gemini', claude: 'Claude', chatgpt: 'ChatGPT' };
+  const POPUP_ACTIONS = {
+    select: enterSelect, selectAll, loadAll, clear: clearSelection, delete: deleteSelected, stop, done: exitSelect,
+  };
+  globalThis.chrome?.runtime?.onMessage?.addListener((message, _sender, reply) => {
+    if (message?.gbd !== 'popup') return;
+    POPUP_ACTIONS[message.action]?.();
+    reply({
+      site: SITE_NAMES[site.statsKey],
+      active: site.isActive(),
+      mode,
+      busy: running || loading,
+      running,
+      selected: selected.size,
+      total: items.length,
+      status: statusText(),
+    });
+  });
+
+  // The bar's on / off switch, from the popup.
+  const syncStorage = globalThis.chrome?.storage?.sync;
+  syncStorage?.get('showBar').then(({ showBar: on }) => {
+    showBar = on !== false;
+    render();
+  }).catch(() => {});
+  globalThis.chrome?.storage?.onChanged?.addListener((changes, area) => {
+    if (area !== 'sync' || !changes.showBar) return;
+    showBar = changes.showBar.newValue !== false;
+    render();
+  });
 
   let scanQueued = false;
   new MutationObserver((muts) => {

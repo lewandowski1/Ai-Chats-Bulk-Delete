@@ -33,6 +33,8 @@ Open the history sidebar first. In AI Mode, that's the panel with "New thread" a
 
 **Stop** halts a run after the chat currently being deleted. Press Esc or click ✕ to leave selection mode. To move the bar, drag it by the dotted handle.
 
+**Without the floating bar:** the popup has the same buttons under **On this page** whenever the tab shows one of the supported sites: Bulk delete, then Select all, Load all, Clear, Delete (click twice to confirm) and Done, and Stop while chats are being deleted. It shows the page's progress as it goes. Select chats in the page's sidebar as usual, then open the popup again to delete them. To hide the bar on the page, switch off **Floating bar on the page** in the popup. The setting syncs across your Chrome profile and applies to open tabs straight away. The 🐞 debug button is only in the bar.
+
 ## How it works
 
 For each chat, the extension clicks through the site's own UI: ⋮ menu → Delete → confirm. It doesn't call any private APIs, so you get the same result as deleting by hand, just without the clicking. Each chat takes about a second. Keep the tab open while a run is in progress.
